@@ -16,6 +16,7 @@ function getAllTeachers(){
                 '<th scope="col">Name</th>' +
                 '<th scope="col">Surname</th>' +
                 '<th scope="col">Remove</th>' +
+                '<th scope="col">Update</th>' +
             '</tr>' +
             '</thead>' +
             '<tbody>';
