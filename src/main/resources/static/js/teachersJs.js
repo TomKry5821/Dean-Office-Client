@@ -131,3 +131,104 @@ function addNewTeacher(){
         alert(xhr.responseText);
     })
 }
+
+function generateAssignGradeToStudentForm(){
+    document.getElementById("data").innerHTML = "";
+    let result;
+    result = '<div align="center">' +
+        '<form>' +
+        '<div class="mb-3">' +
+        '<label class="form-label">Student id</label>' +
+        '<input type="number" min="1" class="form-control" id="studentId">' +
+        '</div>' +
+        '<div class="mb-3">' +
+        '<label class="form-label">Subject id</label>' +
+        '<input type="number" min="1" class="form-control" id="subjectId">' +
+        '</div>' +
+        '<div class="mb-3">' +
+        '<label class="form-label">Grade</label>' +
+        '<input type="number" min="2" class="form-control" id="grade">' +
+        '</div>' +
+        '</form>' +
+        '<button class="btn btn-primary" onclick="assignGradeToStudent()">Assign grade</button>' +
+        '</div>'
+    $('#data').append(result);
+}
+
+function assignGradeToStudent(){
+    let studentId = document.getElementById("studentId").value;
+    let subjectId = document.getElementById("subjectId").value;
+    let grade = document.getElementById("grade").value;
+
+    if(subjectId === "" || studentId === ""){
+        alert("Missing student or subject id");
+        return;
+    }
+
+    const request = $.ajax({
+        url: TEACHERS_URL + "/assignGradeToStudent",
+        type: 'POST',
+        crossOrigin: true,
+        dataType: 'json',
+        contentType: 'application/json',
+        headers: {
+            "studentId": studentId,
+            "subjectId": subjectId,
+            "gradeValue": grade}
+    })
+    request.done(function(message){
+        alert(message.responseText);
+        window.location.reload();
+    })
+    request.fail(function(xhr){
+        alert(xhr.responseText);
+    })
+}
+
+function generateAssignTeacherToSubjectForm(){
+    document.getElementById("data").innerHTML = "";
+    let result;
+    result = '<div align="center">' +
+        '<form>' +
+        '<div class="mb-3">' +
+        '<label class="form-label">Teacher id</label>' +
+        '<input type="number" min="1" class="form-control" id="teacherId">' +
+        '</div>' +
+        '<div class="mb-3">' +
+        '<label class="form-label">Subject id</label>' +
+        '<input type="number" min="1" class="form-control" id="subjectId">' +
+        '</div>' +
+        '</form>' +
+        '<button class="btn btn-primary" onclick="assignTeacherToSubject()">Assign teacher</button>' +
+        '</div>'
+    $('#data').append(result);
+}
+
+function assignTeacherToSubject(){
+    let teacherId = document.getElementById("teacherId").value;
+    let subjectId = document.getElementById("subjectId").value;
+
+    if(subjectId === "" || teacherId === ""){
+        alert("Missing student or subject id");
+        return;
+    }
+
+    const request = $.ajax({
+        url: TEACHERS_URL + "/assignTeacherToSubject",
+        type: 'PUT',
+        crossOrigin: true,
+        dataType: 'json',
+        contentType: 'application/json',
+        headers: {
+            "teacherId": teacherId,
+            "subjectId": subjectId
+        }
+    })
+    request.done(function(message){
+        alert(message.responseText);
+        window.location.reload();
+    })
+    request.fail(function(xhr){
+        alert(xhr.responseText);
+    })
+}
