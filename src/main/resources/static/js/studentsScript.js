@@ -39,7 +39,7 @@ function createStudentRow(student){
         '<td><input id="' + student.id + '-name" type="text" value="' + student.name + '"></td>' +
         '<td><input id="' + student.id + '-surname" type="text" value="' + student.surname + '"></td>' +
         '<td> <input id="' + student.id + '-birthDate" type="text" value="' + student.birthDate.toString() + '"</td>' +
-        '<td><button class="btn btn-sm btn-danger rounded-3" onclick="removeStudent(' + student.id + ')">remove teacher</button></td>' +
+        '<td><button class="btn btn-sm btn-danger rounded-3" onclick="removeStudent(' + student.id + ')">remove student</button></td>' +
         '<td><button class="btn btn-sm btn-info rounded-3" onclick="modifyStudent(' + student.id + ')">update info</button></td>' +
         '</tr>'
     return result;
@@ -142,4 +142,62 @@ function addNewStudent(){
     request.fail(function(xhr){
         alert(xhr.responseText);
     })
+}
+
+function generateGetStudentsGradesFromSubjectForm(){
+    document.getElementById("data").innerHTML = "";
+    let result;
+    result = '<div align="center">' +
+        '<form>' +
+        '<div class="mb-3">' +
+        '<label class="form-label">Student id</label>' +
+        '<input type="text" class="form-control" id="studentId">' +
+        '</div>' +
+        '<div class="mb-3">' +
+        '<label class="form-label">Subject id</label>' +
+        '<input type="text" class="form-control" id="subjectId">' +
+        '</div>' +
+        '</form>' +
+        '<button class="btn btn-primary" onclick="getStudentsGradesFromSubject()">Get student grades</button>' +
+        '</div>'
+    $('#data').append(result);
+}
+
+function getStudentsGradesFromSubject(){
+    let studentId = document.getElementById("studentId").value;
+    let subjectId = document.getElementById("subjectId").value;
+
+    const request = $.ajax({
+        url: STUDENTS_URL + "/grades/" + subjectId,
+        type: 'GET',
+        dataType: 'json',
+        headers: {"studentId": studentId}
+    })
+    request.done(function(data){
+        let result;
+        document.getElementById("data").innerHTML = "";
+        result = '<table class="table table-borderless table-striped">' +
+            '<thead>' +
+            '<tr>' +
+            '<th scope="col">Grade</th>' +
+            '</tr>' +
+            '</thead>' +
+            '<tbody>';
+        $.each(data, function (id, element){
+            result += createGradeRow(element);
+        })
+        result += '</tbody></table>';
+        $('#data').append(result);
+    })
+    request.fail(function (xhr, textStatus){
+        alert(textStatus);
+    })
+}
+
+function createGradeRow(element){
+    let result;
+    result = '<tr>' +
+        '<th scope="row">' + element + '</th>' +
+        '</tr>'
+    return result;
 }
