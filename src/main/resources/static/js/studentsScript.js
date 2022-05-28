@@ -194,6 +194,49 @@ function getStudentsGradesFromSubject(){
     })
 }
 
+function generateGetStudentsGradesAverageForm(){
+    document.getElementById("data").innerHTML = "";
+    let result;
+    result = '<div align="center">' +
+        '<form>' +
+        '<div class="mb-3">' +
+        '<label class="form-label">Student id</label>' +
+        '<input type="text" class="form-control" id="studentId">' +
+        '</div>' +
+        '</form>' +
+        '<button class="btn btn-primary" onclick="getStudentsGradesAverage()">Get student grades average</button>' +
+        '</div>'
+    $('#data').append(result);
+}
+
+function getStudentsGradesAverage(){
+    let studentId = document.getElementById("studentId").value;
+
+    const request = $.ajax({
+        url: STUDENTS_URL + "/studentGradesAverage",
+        type: 'GET',
+        dataType: 'json',
+        headers: {"studentId": studentId}
+    })
+    request.done(function(data){
+        let result;
+        document.getElementById("data").innerHTML = "";
+        result = '<table class="table table-borderless table-striped">' +
+            '<thead>' +
+            '<tr>' +
+            '<th scope="col">Grades average</th>' +
+            '</tr>' +
+            '</thead>' +
+            '<tbody>';
+            result += createGradeRow(data);
+        result += '</tbody></table>';
+        $('#data').append(result);
+    })
+    request.fail(function (xhr, textStatus){
+        alert(textStatus);
+    })
+}
+
 function createGradeRow(element){
     let result;
     result = '<tr>' +
